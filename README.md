@@ -1,4 +1,4 @@
-# Install
+# F5 Cloud Services - LogStream App
 ## Pre-requisites
 Deploy a Linux VM.
 Example: `CentOS 7.5`
@@ -52,16 +52,15 @@ More information about the chosen OS: [CentOS](https://unit.nginx.org/installati
     state: directory
 ```
 ```yaml
-- name: CREATE StreamLog app directoty
+- name: CREATE log directoty
   file:
-    path: /etc/f5-cs-apps/logstream/
-    state: directory
+    path: /etc/f5-cs-apps/log/
 ```
 ```yaml
 - name: GIT CLONE StreamLog sources
   git:
-    repo: 'https://github.com/miearls/f5cseap.git'
-    dest: /etc/f5-cs-apps/logstream/
+    repo: 'https://github.com/nergalex/logstream.git'
+    dest: /etc/f5-cs-apps/
 ```
 
 ### COPY StreamLog
@@ -76,9 +75,9 @@ More information about the chosen OS: [CentOS](https://unit.nginx.org/installati
 Example:
 ```bash
 pip3.6 install virtualenv
-/usr/local/bin/virtualenv -p python3.6 /etc/f5-cs-apps/
-source /etc/f5-cs-apps/bin/activate
-pip install -r /etc/f5-cs-apps/logstream/f5cseap/requirements.txt
+/usr/local/bin/virtualenv -p python3.6 /etc/f5-cs-apps/venv/
+source /etc/f5-cs-apps/venv/bin/activate
+pip install -r /etc/f5-cs-apps/logstream/requirements.txt
 deactivate
 ```
 
@@ -86,6 +85,7 @@ deactivate
 Follow the NGINX Unit guide for [flask](https://unit.nginx.org/howto/flask/)
 * GET configuration
 ```bash
+cd ~
 curl --unix-socket /var/run/unit/control.sock http://localhost/config/ > config.json
 ```
 * EDIT configuration
