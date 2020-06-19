@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "b0c69b80-8870-46d5-9fbb-3d53bbeceb1e",
+		"name": "LogStream",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Declare",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bf7157af-08e5-4149-a21e-a5df4fafe722",
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"f5cs\": {\n    \"password\": \"{{PASSWORD}}\",\n    \"username\": \"{{USERNAME}}\"\n  },\n  \"logcollector\": {\n    \"syslog\": [\n      {\n        \"ip_address\": \"1.1.1.1\",\n        \"port\": 514\n      },\n      {\n        \"ip_address\": \"2.2.2.2\",\n        \"port\": 514\n      }\n    ]\n  }\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/declare",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"declare"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Declare",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "135e674b-a5a3-4704-aafd-983420d2136b",
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"f5cs\": {\n    \"password\": \"{{PASSWORD}}\",\n    \"username\": \"{{USERNAME}}\"\n  },\n  \"logcollector\": {\n    \"syslog\": [\n      {\n        \"ip_address\": \"1.1.1.1\",\n        \"port\": 514\n      },\n      {\n        \"ip_address\": \"2.2.2.2\",\n        \"port\": 500\n      }\n    ]\n  }\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/declare",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"declare"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Start",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f80b127a-190a-4233-bb2a-81292b4adfe0",
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"action\": \"start\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/engine",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Stop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f8dbadc6-6aca-45f7-8bfe-46226684c4a4",
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"action\": \"stop\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/engine",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Restart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb3a40f9-69fd-4ea1-bf3d-4b3139005988",
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"action\": \"restart\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/engine",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "55d2d5ad-0127-4bad-8002-e963aeb36bb1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "180692b2-c784-4aee-9fe4-5356e33c283e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
