@@ -55,6 +55,7 @@ More information about the chosen OS: [CentOS](https://unit.nginx.org/installati
 - name: CREATE log directoty
   file:
     path: /etc/f5-cs-apps/log/
+    mode: 777
 ```
 ```yaml
 - name: GIT CLONE StreamLog sources
@@ -62,8 +63,9 @@ More information about the chosen OS: [CentOS](https://unit.nginx.org/installati
     repo: 'https://github.com/nergalex/logstream.git'
     dest: /etc/f5-cs-apps/
 ```
-
-### COPY StreamLog
+```bash
+chmod 777 /etc/f5-cs-apps/logstream
+```
 ```yaml
 - name: INSTALL virtualenv
   pip:
@@ -102,9 +104,9 @@ vi config.json
     "applications": {
         "logstream": {
             "type": "python 3",
-            "working_directory": "/etc/f5-cs-apps/",
-            "home": "venv",
-            "path": "logstream",
+            "working_directory": "/etc/f5-cs-apps/logstream",
+            "home": "/etc/f5-cs-apps/venv",
+            "path": "/etc/f5-cs-apps/logstream",
             "module": "wsgi"
         }
     }
