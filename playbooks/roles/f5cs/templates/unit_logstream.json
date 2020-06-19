@@ -1,0 +1,16 @@
+{
+    "listeners": {
+        "*:8080": {
+            "pass": "applications/logstream"
+        }
+    },
+    "applications": {
+        "logstream": {
+            "type": "python 3",
+            "working_directory": "/etc/f5-cs-apps/logstream",
+            "home": "/etc/f5-cs-apps/venv",
+            "path": "/etc/f5-cs-apps/logstream",
+            "module": "wsgi"
+        }
+    }
+}

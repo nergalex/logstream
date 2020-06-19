@@ -1,89 +1,69 @@
 # F5 Cloud Services - LogStream App
 ## Pre-requisites
-Deploy a Linux VM.
-Example: `CentOS 7.5`
+* Deploy a Linux VM. Example: `CentOS 7.5`
+* In F5 CS, create a user account with limited access (Read)
 
 ## Install via Ansible
-Use Ansible rolefor CentOS 7.x with extra variables below.
+Use Ansible role for CentOS 7.x with extra variables below.
+
+| Job template  | playbook      | activity      | inventory     | limit         | credential   |
+| ------------- | ------------- | ------------- | ------------- | ------------- |------------- |
+| `onboard`  | `playbooks/f5cs.yaml`    | `unit_onboarding`    | `localhost`  | `localhost` | `my_vm_credential` |
+| `deploy_app_service`  | `playbooks/f5cs.yaml`    | `unit_app_service-logstream`    | `localhost`  | `localhost` | `my_vm_credential` |
+
+| Extra variable| Description | Example of value      |
+| ------------- | ------------- | ------------- |
+| `activity` | cf. activity value per Job Template | `unit_onboarding` |
+| `extra_vm_name` | VM hostname | `vm-logstream` |
+| `extra_vm_ip_mgt` | VM management IP | `10.100.0.5` |
 
 ## Install manually
-### INSTALL packages
-Install packages.
-Example: use `yum -y install`
-```yaml
-- name: INSTALL package
-  package:
-    name:
-      - python3
-      - python-setuptools
-      - git
-```
-
-Start NGINX Unit
-`sudo service unit start`
+Example below for CentOS.
+Please refer to [NGINX Unit](https://unit.nginx.org/installation/#centos) web site for another OS.
 
 ### INSTALL NGINX Unit
-Install NGINX Unit and its python module.
-More information about the chosen OS: [CentOS](https://unit.nginx.org/installation/#centos)
-```yaml
-- name: COPY unit repo
-  copy:
-    content:
-        [unit]
-        name=unit repo
-        baseurl=https://packages.nginx.org/unit/centos/$releasever/$basearch/
-        gpgcheck=0
-        enabled=1
-    dest: /etc/yum.repos.d/unit.repo
+* CREATE repo info
+```bash
+sudo vi /etc/yum.repos.d/unit.repo
+[unit]
+name=unit repo
+baseurl=https://packages.nginx.org/unit/centos/$releasever/$basearch/
+gpgcheck=0
+enabled=1
 ```
-```yaml
-- name: INSTALL package
-  package:
-    name:
-      - unit
-      - unit-python36
+* INSTALL packages. Example: use `yum -y install`
+```bash
+sudo yum -y install python3 \
+    python-setuptools \
+    git \
+    unit \
+    unit-python36
+```
+* Start NGINX Unit
+```bash
+sudo service unit start
 ```
 
-### COPY StreamLog
-```yaml
-- name: CREATE F5 Cloud Services apps directoty
-  file:
-    path: /etc/f5-cs-apps
-    state: directory
-```
-```yaml
-- name: CREATE log directoty
-  file:
-    path: /etc/f5-cs-apps/log/
-    mode: 777
-```
-```yaml
-- name: GIT CLONE StreamLog sources
-  git:
-    repo: 'https://github.com/nergalex/logstream.git'
-    dest: /etc/f5-cs-apps/
-```
+### COPY LogStream sources
+* CREATE F5 Cloud Services apps directory
 ```bash
-chmod 777 /etc/f5-cs-apps/logstream
+sudo mkdir /etc/f5-cs-apps
+sudo cd /etc/f5-cs-apps/
+sudo git clone https://github.com/nergalex/logstream.git
+sudo chmod 777 /etc/f5-cs-apps/logstream
+sudo chmod 777 /etc/f5-cs-apps/logstream/declaration.json
+sudo chmod 777 /etc/f5-cs-apps/logstream/logstream.log
 ```
-```yaml
-- name: INSTALL virtualenv
-  pip:
-    name:
-      - pip
-      - virtualenv
-    executable: pip3.6
-```
-Example:
+* CREATE virtual environment
 ```bash
-pip3.6 install virtualenv
-/usr/local/bin/virtualenv -p python3.6 /etc/f5-cs-apps/venv/
-source /etc/f5-cs-apps/venv/bin/activate
-pip install -r /etc/f5-cs-apps/logstream/requirements.txt
-deactivate
+sudo pip3.6 install virtualenv
+sudo /usr/local/bin/virtualenv -p python3.6 /etc/f5-cs-apps/venv/
+sudo source /etc/f5-cs-apps/venv/bin/activate
+sudo pip install -r /etc/f5-cs-apps/logstream/requirements.txt
+sudo deactivate
 ```
 
-### Configure UNIT
+### Configure FaaS (NGINX Unit)
 Follow the NGINX Unit guide for [flask](https://unit.nginx.org/howto/flask/)
 * GET configuration
 ```bash
@@ -121,23 +101,20 @@ curl -X PUT --data-binary @config.json --unix-socket /var/run/unit/control.sock 
 curl http://127.0.0.1:8080/declare
 ```
 
-# https://unit.nginx.org/configuration/#python
-- name: UPDATE Unit configuration
-  uri:
-    unix_socket: /var/run/unit/control.sock
-    url: "http://{{ inventory_hostname }}/config/"
-    method: PUT
-    headers:
-        Content-Type: application/json
-    body: "{{ lookup('template', 'nginx_unit_webhook.json') }}"
-    body_format: json
-    timeout: 60
-    status_code: 200, 202
-    validate_certs: false
-  register: config_json
+## Configuration guide
+2 ways to configure LogStream:
+* Access to API Dev Portal with your browser `http://<extra_vm_ip_mgt>:8080/apidocs/`
+* Use Postman. Import collection LogStream.postman_collection.json
 
-- debug:
-    var: config_json
+Configuration workflow:
+* First time, use `declare` entry point to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
+* Then use `action` entry point to start/stop the engine.
+* Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
+* The last `declaration` is saved locally.
+
+## Security consideration
+* In the `declaration`, set a user account with limited access (Read)
+* No logs are stored on the system. LogStream PULL logs from F5 CS EAP and then PUSH them directly to remote log collector server(s).
 
 
 

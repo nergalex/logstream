@@ -296,8 +296,6 @@ class EngineThreading(Resource):
                     args=(thread_manager['event'], thread_name, eap_instance)
                 )
                 thread_manager['thread_queue'][thread_name] = t
-                print("%s::%s: NEW THREAD: id=%s;eap_instance:%s" %
-                            (__class__.__name__, __name__, t.name, eap_instance.id))
                 logger.debug("%s::%s: NEW THREAD: id=%s;eap_instance:%s" %
                             (__class__.__name__, __name__, t.name, eap_instance.id))
                 t.start()
@@ -314,21 +312,15 @@ class EngineThreading(Resource):
         if not thread_manager['event'].is_set():
             # set flag as a signal to threads for stop processing their next fetch logs iteration
             thread_manager['event'].set()
-            print("%s::%s: Main - event set" %
-                         (__class__.__name__, __name__))
             logger.debug("%s::%s: Main - event set" %
                          (__class__.__name__, __name__))
 
             # wait for threads to stop processing their current fetch logs iteration
             while len(thread_manager['thread_queue'].keys()) > 0:
-                print("%s::%s: Main - wait for dying thread" %
-                             (__class__.__name__, __name__))
                 logger.debug("%s::%s: Main - wait for dying thread" %
                              (__class__.__name__, __name__))
                 time.sleep(thread_manager['update_interval'])
 
-            print("%s::%s: Main - all thread died" %
-                         (__class__.__name__, __name__))
             logger.debug("%s::%s: Main - all thread died" %
                          (__class__.__name__, __name__))
             return "Engine stopped", 200
@@ -354,18 +346,12 @@ class EngineThreading(Resource):
             eap_instance.fetch_security_events()
             logcol_db.emit(eap_instance.pop_security_events())
 
-            print("%s::%s: THREAD SENT LOGS: name=%s;eap_instance:%s" %
-                         (__class__.__name__, __name__, thread_name, eap_instance.id))
             logger.debug("%s::%s: THREAD SENT LOGS: name=%s;eap_instance:%s" %
                          (__class__.__name__, __name__, thread_name, eap_instance.id))
             time.sleep(thread_manager['update_interval'])
-            print("%s::%s: THREAD AWAKE: name=%s;eap_instance:%s" %
-                         (__class__.__name__, __name__, thread_name, eap_instance.id))
             logger.debug("%s::%s: THREAD AWAKE: name=%s;eap_instance:%s" %
                          (__class__.__name__, __name__, thread_name, eap_instance.id))
 
-        print("%s::%s: EXIT THREAD: name=%s;eap_instance:%s" %
-                     (__class__.__name__, __name__, thread_name, eap_instance.id))
         logger.debug("%s::%s: EXIT THREAD: name=%s;eap_instance:%s" %
                      (__class__.__name__, __name__, thread_name, eap_instance.id))
         thread_manager['thread_queue'].pop(thread_name, None)
@@ -478,7 +464,7 @@ if local_config.get_json() is not None:
 api.add_resource(Declare, '/declare')
 api.add_resource(Engine, '/engine')
 
-# Start program
+# Start program in developer mode
 if __name__ == '__main__':
     print("Dev Portal: http://127.0.0.1:5000/apidocs/")
     application.run(

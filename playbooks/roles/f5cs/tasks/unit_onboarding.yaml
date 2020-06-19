@@ -1,0 +1,44 @@
+---
+# https://unit.nginx.org/installation/centos
+- name: COPY unit repo
+  copy:
+    content: "{{ lookup('template', 'unit_repo.conf') }}"
+    dest: /etc/yum.repos.d/unit.repo
+
+- name: INSTALL package
+  package:
+    name:
+      - python3
+      - python-setuptools
+      - git
+      - unit
+      - unit-python36
+    state: present
+
+- name: Start service NGINX Unit, if not started
+  service:
+    name: unit
+    state: started
+
+- name: INSTALL virtualenv
+  pip:
+    name:
+      - pip
+      - virtualenv
+    state: forcereinstall
+    executable: pip3.6
+
+- name: CREATE F5 CS apps directory
+  file:
+    path: /etc/f5-cs-apps
+    state: directory
+
+
+
+
+
+
+
+
+
+...

@@ -34,21 +34,18 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"f5cs\": {\n    \"password\": \"{{PASSWORD}}\",\n    \"username\": \"{{USERNAME}}\"\n  },\n  \"logcollector\": {\n    \"syslog\": [\n      {\n        \"ip_address\": \"1.1.1.1\",\n        \"port\": 514\n      },\n      {\n        \"ip_address\": \"2.2.2.2\",\n        \"port\": 514\n      }\n    ]\n  }\n}",
+					"raw": "{\n  \"f5cs\": {\n    \"password\": \"{{PASSWORD}}\",\n    \"username\": \"{{USERNAME}}\"\n  },\n  \"logcollector\": {\n    \"syslog\": [\n      {\n        \"ip_address\": \"10.100.0.10\",\n        \"port\": 514\n      }\n    ]\n  }\n}",
 					"options": {
 						"raw": {}
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/declare",
+					"raw": "http://{{logstream_server}}:{{logstream_port}}/declare",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{logstream_server}}"
 					],
-					"port": "5000",
+					"port": "{{logstream_port}}",
 					"path": [
 						"declare"
 					]

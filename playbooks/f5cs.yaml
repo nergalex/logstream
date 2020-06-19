@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: CREATE ansible-playbook in-memory inventory
+    add_host:
+      groups: "inventory_logstream"
+      hostname: "{{ extra_vm_name }}"
+      ansible_host: "{{ extra_vm_ip_mgt }}"
+      ansible_port: 22
+
+- hosts: inventory_logstream
+  gather_facts: no
+  become: true
+  roles:
+    - role: f5cs

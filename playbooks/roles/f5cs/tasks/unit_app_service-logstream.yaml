@@ -1,0 +1,62 @@
+---
+# https://unit.nginx.org/howto/flask/
+- name: CREATE logstream app directoty
+  file:
+    path: /etc/f5-cs-apps/logstream/
+    state: directory
+    mode: 777
+
+- name: FETCH f5autoscale project
+  git:
+    repo: 'https://github.com/nergalex/logstream.git'
+    dest: /etc/f5-cs-apps/logstream/
+
+- name: ALLOW Unit to modify config backup file
+  file:
+    path: /etc/f5-cs-apps/logstream/declaration.json
+    mode: '0777'
+
+- name: ALLOW Unit to modify log file
+  file:
+    path: /etc/f5-cs-apps/logstream/logstream.log
+    mode: '0777'
+
+- name: INSTALL requirements
+  pip:
+    requirements: /etc/f5-cs-apps/logstream/requirements.txt
+    virtualenv: /etc/f5-cs-apps/venv
+    virtualenv_python: python3.6
+    virtualenv_command: /usr/local/bin/virtualenv
+
+- name: GET current Unit configuration
+  uri:
+    unix_socket: /var/run/unit/control.sock
+    url: "http://{{ inventory_hostname }}/config/"
+    method: GET
+    return_content: yes
+    status_code: 200
+    validate_certs: false
+  register: config_json
+
+- debug:
+    var: config_json
+
+# https://unit.nginx.org/configuration/#python
+- name: UPDATE Unit configuration
+  uri:
+    unix_socket: /var/run/unit/control.sock
+    url: "http://{{ inventory_hostname }}/config/"
+    method: PUT
+    headers:
+        Content-Type: application/json
+    body: "{{ lookup('template', 'unit_logstream.json') }}"
+    body_format: json
+    timeout: 60
+    status_code: 200, 202
+    validate_certs: false
+  register: config_json
+
+- debug:
+    var: config_json
+
+...
