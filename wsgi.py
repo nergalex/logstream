@@ -430,7 +430,7 @@ class Engine(Resource):
 
 # Global var
 logger = setup_logging(
-    log_level='debug',
+    log_level='warning',
     log_file='logstream.log'
 )
 logcol_db = logcollector.LogCollectorDB(logger)
