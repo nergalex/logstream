@@ -9,6 +9,10 @@ LogStream App pulls event logs regularly from EAP and forwards them to remote sy
 
 [logstream_schema]: https://github.com/nergalex/logstream/blob/master/image/EAP_LogStream.png "logstream_schema"
 
+## Security consideration
+* In the `declaration`, set a user account with limited access (Read)
+* No logs are stored on the system. LogStream PULL logs from F5 CS EAP and then PUSH them directly to remote log collector server(s).
+
 ## Pre-requisites
 * Deploy a Linux VM. Example: `CentOS 7.5`
 * In F5 CS, create a user account with limited access (Read)
@@ -121,10 +125,6 @@ Configuration workflow:
 * Then use `action` entry point to start/stop the engine.
 * Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
 * The last `declaration` is saved locally.
-
-## Security consideration
-* In the `declaration`, set a user account with limited access (Read)
-* No logs are stored on the system. LogStream PULL logs from F5 CS EAP and then PUSH them directly to remote log collector server(s).
 
 
 
