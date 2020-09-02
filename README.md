@@ -7,7 +7,7 @@ LogStream App pulls event logs regularly from EAP and forwards them to remote sy
 
 ![alt text][logstream_schema]
 
-[logstream_schema]: https://github.com/nergalex/logstream/blob/master/image/EAP_LogStream.png "logstream_schema"
+[logstream_schema]: https://github.com/nergalex/logstream/blob/master/image/EAP_LogStream_1.png "logstream_schema"
 
 ## Security consideration
 * In the `declaration`, set a user account with limited access (Read)
