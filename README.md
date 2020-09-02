@@ -2,6 +2,7 @@
 ## Use Case
 [F5 Cloud Services Essential App Protect](https://clouddocs.f5.com/cloud-services/latest/f5-cloud-services-Essential.App.Protect-About.html) is a Web Application Firewall in SaaS mode
 Security event logs can be pulled through API.
+
 LogStream App pulls logs regularly from EAP and forwards them to remote syslog servers (log collector, SIEM)
 ![alt text][logstream_schema]
 
