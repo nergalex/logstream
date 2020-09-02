@@ -126,7 +126,3 @@ Configuration workflow:
 * Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
 * The last `declaration` is saved locally.
 
-
-
-
-
